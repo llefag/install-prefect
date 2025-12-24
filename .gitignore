@@ -1,0 +1,10 @@
+# Fichiers de secrets (ne jamais versionner!)
+secrets.txt
+*.env
+
+# Documentation privée
+README_PRIVATE.md
+
+# Fichiers temporaires
+*.tmp
+*.log
