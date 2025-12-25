@@ -473,7 +473,7 @@ set -e
 python3 -m venv "$1/venv"
 source "$1/venv/bin/activate"
 pip install --upgrade pip --quiet --timeout 60
-pip install --upgrade prefect --quiet --timeout 120
+pip install --upgrade prefect prefect-docker --quiet --timeout 120
 EOFSCRIPT
 )
   
