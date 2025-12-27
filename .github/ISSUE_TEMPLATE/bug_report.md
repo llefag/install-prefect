@@ -21,13 +21,3 @@ assignees: llefag
 ## Environnement
 - OS: 
 - Version du script: 
-
-
-
-
-
-
-
-
-
-

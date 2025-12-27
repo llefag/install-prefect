@@ -9,13 +9,3 @@ Ce dépôt est maintenu exclusivement par son propriétaire pour un usage person
 - Les forks sont autorisés (licence MIT) mais aucun support ne sera fourni
 
 Merci de votre compréhension.
-
-
-
-
-
-
-
-
-
-
