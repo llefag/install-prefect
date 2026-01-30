@@ -75,6 +75,10 @@ sudo systemctl restart prefect-worker-<nom> # Redémarrer
 - Fichiers env en mode 600 (root only)
 - Hardening systemd complet
 
+## Documentation supplémentaire
+
+- [Configuration Work Pool centralisée](docs/work-pool-default-env-recommendation.md) - Guide pour centraliser les variables d'environnement dans le Work Pool
+
 ## Prérequis
 
 - Linux + systemd
