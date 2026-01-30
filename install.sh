@@ -417,18 +417,17 @@ write_env_file() {
   local env_file="$1"
   local api_url="$2"
   local api_key="$3"
-  local prefect_home="$4"
-  
-  # Créer avec permissions restrictives dès le départ
+  # PREFECT_HOME n'est PAS mis dans le fichier env : il est défini uniquement
+  # dans le unit systemd. Ainsi le worker a PREFECT_HOME sur l'hôte, mais
+  # les jobs Docker (ex. lxboard-etl) ne le reçoivent pas et utilisent
+  # celui défini dans les job_variables du déploiement (/app/.prefect).
+  # Évite "Failed to create the Prefect home directory" + "Unable to authenticate to the event stream".
   install -m 600 -o root -g root /dev/null "$env_file"
-  
   cat > "$env_file" <<EOF
 PREFECT_API_URL=$api_url
 PREFECT_API_KEY=$api_key
 PREFECT_LOGGING_LEVEL=INFO
-PREFECT_HOME=$prefect_home
 EOF
-  
   log_to_file "AUDIT" "Fichier env créé: $env_file (mode 600)"
 }
 
@@ -483,7 +482,7 @@ EOFSCRIPT
   fi
   
   log_info "Configuration du fichier d'environnement..."
-  write_env_file "$ENV" "$PREFECT_API_URL" "$PREFECT_API_KEY" "$PREFECT_HOME"
+  write_env_file "$ENV" "$PREFECT_API_URL" "$PREFECT_API_KEY"
   
   # Paths d'écriture requis avec ProtectSystem=strict
   local RW="ReadWritePaths=${INSTALL_DIR}"
@@ -505,6 +504,7 @@ Type=simple
 User=${PREFECT_USER}
 Group=${PREFECT_USER}
 EnvironmentFile=${ENV}
+Environment=PREFECT_HOME=${PREFECT_HOME}
 WorkingDirectory=${INSTALL_DIR}
 ExecStart=${INSTALL_DIR}/venv/bin/prefect worker start -p ${WORK_POOL} --name ${WORKER_NAME}
 Restart=always

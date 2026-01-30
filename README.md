@@ -42,6 +42,25 @@ sudo ./manage.sh
 
 Menu interactif : lister, renommer, upgrade, supprimer les workers.
 
+### Worker existant : jobs Docker qui plantent (PREFECT_HOME)
+
+Si les flows en conteneur Docker échouent avec « Failed to create the Prefect home directory » ou « Unable to authenticate to the event stream », le worker ne doit pas transmettre son `PREFECT_HOME` au conteneur. À faire sur la VM :
+
+1. Retirer `PREFECT_HOME` du fichier env du worker :
+   ```bash
+   sudo sed -i '/^PREFECT_HOME=/d' /etc/prefect-worker-<nom>.env
+   ```
+2. L’ajouter uniquement dans le unit systemd (remplacer `<nom>` et le chemin si besoin) :
+   ```bash
+   sudo sed -i '/EnvironmentFile=/a Environment=PREFECT_HOME=/opt/prefect/<nom>/.prefect' /etc/systemd/system/prefect-worker-<nom>.service
+   ```
+3. Recharger et redémarrer :
+   ```bash
+   sudo systemctl daemon-reload && sudo systemctl restart prefect-worker-<nom>
+   ```
+
+Les nouvelles installations font déjà cette séparation automatiquement.
+
 ## Commandes utiles
 
 ```bash
